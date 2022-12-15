@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React from "react";
 import styled from "styled-components";
 
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Box = styled.div`
+const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
   background-color: white;
@@ -21,8 +21,11 @@ const Box = styled.div`
 function App() {
   return (
     <Wrapper>
-      <Box />
-      <motion.div></motion.div>
+      <Box
+        transition={{ type: "spring", delay: 0.5 }}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1, rotateZ: 360 }}
+      />
     </Wrapper>
   );
 }
