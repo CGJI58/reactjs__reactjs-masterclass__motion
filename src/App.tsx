@@ -1,6 +1,12 @@
 import styled from "styled-components";
-import { motion, motionValue, useTransform, useScroll } from "framer-motion";
-import { useEffect, useRef } from "react";
+import {
+  motion,
+  motionValue,
+  useTransform,
+  useScroll,
+  AnimatePresence,
+} from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 const Wrapper = styled(motion.div)`
   height: 100vh;
@@ -10,38 +16,52 @@ const Wrapper = styled(motion.div)`
   align-items: center;
 `;
 
-const Svg = styled.svg`
-  width: 300px;
-  height: 300px;
-  path {
-    stroke: white;
-    stroke-width: 2;
-  }
+const Box = styled(motion.div)`
+  width: 400px;
+  height: 200px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 40px;
+  position: absolute;
+  top: 100px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
-const svg = {
-  start: { pathLength: 0, fill: "rgba(255, 255, 255, 0)" },
-  end: {
-    fill: "rgba(255, 255, 255, 1)",
-    pathLength: 1,
+const boxVariants = {
+  initial: {
+    opacity: 0,
+    scale: 0,
+    y: 300,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    rotateZ: 360,
+    y: 0,
+  },
+  leaving: {
+    opacity: 0,
+    scale: 0,
+    y: 300,
   },
 };
 
 function App() {
+  const [showing, setShowing] = useState(false);
+  const toggleShowing = () => setShowing((prev) => !prev);
   return (
     <Wrapper>
-      <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-        <motion.path
-          variants={svg}
-          initial="start"
-          animate="end"
-          transition={{
-            default: { duration: 5 },
-            fill: { duration: 1, delay: 3 },
-          }}
-          d="M624 448H16c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h608c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16zM80.55 341.27c6.28 6.84 15.1 10.72 24.33 10.71l130.54-.18a65.62 65.62 0 0 0 29.64-7.12l290.96-147.65c26.74-13.57 50.71-32.94 67.02-58.31 18.31-28.48 20.3-49.09 13.07-63.65-7.21-14.57-24.74-25.27-58.25-27.45-29.85-1.94-59.54 5.92-86.28 19.48l-98.51 49.99-218.7-82.06a17.799 17.799 0 0 0-18-1.11L90.62 67.29c-10.67 5.41-13.25 19.65-5.17 28.53l156.22 98.1-103.21 52.38-72.35-36.47a17.804 17.804 0 0 0-16.07.02L9.91 230.22c-10.44 5.3-13.19 19.12-5.57 28.08l76.21 82.97z"
-        />
-      </Svg>
+      <button onClick={toggleShowing}>Click</button>
+      <AnimatePresence>
+        {showing ? (
+          <Box
+            variants={boxVariants}
+            initial="initial"
+            animate="visible"
+            exit="leaving"
+            transition={{ duration: 0.3 }}
+          />
+        ) : null}
+      </AnimatePresence>
     </Wrapper>
   );
 }
