@@ -2,54 +2,46 @@ import styled from "styled-components";
 import { motion, motionValue, useTransform, useScroll } from "framer-motion";
 import { useEffect, useRef } from "react";
 
-const X_RANGE = [-900, 900];
-
 const Wrapper = styled(motion.div)`
-  height: 200vh;
+  height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const BiggerBox = styled.div`
-  width: 600px;
-  height: 600px;
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const Svg = styled.svg`
+  width: 300px;
+  height: 300px;
+  path {
+    stroke: white;
+    stroke-width: 2;
+  }
 `;
 
-const Box = styled(motion.div)`
-  width: 200px;
-  height: 200px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  background-color: whitesmoke;
-  border-radius: 40px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-`;
-
-const boxVariants = {
-  hover: { rotateZ: 90 },
-  click: { borderRadius: "100px" },
+const svg = {
+  start: { pathLength: 0, fill: "rgba(255, 255, 255, 0)" },
+  end: {
+    fill: "rgba(255, 255, 255, 1)",
+    pathLength: 1,
+  },
 };
 
 function App() {
-  const biggerBoxRef = useRef<HTMLDivElement>(null);
-  const x = motionValue(0);
-  const rotateZ = useTransform(x, X_RANGE, [-720, 720]);
-  const gradient = useTransform(x, X_RANGE, [
-    "linear-gradient(135deg, rgb(0, 210, 238), rgb(0, 83, 238))",
-    "linear-gradient(135deg, rgb(0, 238, 155), rgb(238, 178, 0))",
-  ]);
-  const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 5]);
   return (
-    <Wrapper style={{ background: gradient }}>
-      <Box style={{ x, rotateZ, scale }} drag="x" dragSnapToOrigin />
+    <Wrapper>
+      <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+        <motion.path
+          variants={svg}
+          initial="start"
+          animate="end"
+          transition={{
+            default: { duration: 5 },
+            fill: { duration: 1, delay: 3 },
+          }}
+          d="M624 448H16c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h608c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16zM80.55 341.27c6.28 6.84 15.1 10.72 24.33 10.71l130.54-.18a65.62 65.62 0 0 0 29.64-7.12l290.96-147.65c26.74-13.57 50.71-32.94 67.02-58.31 18.31-28.48 20.3-49.09 13.07-63.65-7.21-14.57-24.74-25.27-58.25-27.45-29.85-1.94-59.54 5.92-86.28 19.48l-98.51 49.99-218.7-82.06a17.799 17.799 0 0 0-18-1.11L90.62 67.29c-10.67 5.41-13.25 19.65-5.17 28.53l156.22 98.1-103.21 52.38-72.35-36.47a17.804 17.804 0 0 0-16.07.02L9.91 230.22c-10.44 5.3-13.19 19.12-5.57 28.08l76.21 82.97z"
+        />
+      </Svg>
     </Wrapper>
   );
 }
