@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { motion, motionValue } from "framer-motion";
+import { motion, motionValue, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 const Wrapper = styled.div`
@@ -38,15 +38,13 @@ const boxVariants = {
 function App() {
   const biggerBoxRef = useRef<HTMLDivElement>(null);
   const x = motionValue(0);
-  useEffect(() => {
-    x.onChange(() => console.log(x.get()));
-  }, [x]);
+  const scale = useTransform(x, [-900, 0, 900], [2, 1, 0.1]);
   return (
     <Wrapper>
       <button onClick={() => x.set(x.get() + 50)}>click</button>
       <BiggerBox ref={biggerBoxRef}>
         <Box
-          style={{ x }}
+          style={{ x, scale }}
           drag="x"
           dragSnapToOrigin
           dragElastic={1}
